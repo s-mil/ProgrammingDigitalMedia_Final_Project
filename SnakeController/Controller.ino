@@ -11,18 +11,22 @@ unsigned long debounceDelay = 50;
 
 //NORTH setup
 int lastNORTHState = 0;
+int NORTHState =0;
 unsigned long lastNORTHDebounceTime = 0; 
 
 //EAST setup
 int lastEASTState = 0;
+int EASTState =0;
 unsigned long lastEASTDebounceTime = 0; 
 
 //SOUTH setup
 int lastSOUTHState = 0;
+int SOUTHState =0;
 unsigned long lastSOUTHDebounceTime = 0; 
 
 //WEST setup
 int lastWESTState = 0;
+int WESTState =0;
 unsigned long lastWESTDebounceTime = 0; 
 
 
@@ -37,112 +41,96 @@ void setup(){
 
 void loop(){
 
+    readNORTH();
+    readSOUTH();
+    readEAST();
+    readWEST();
 }
 
-void readButton()
+void readNORTH()
 {
-    int reading = digitalRead(colorPin);
+    int reading = digitalRead(NORTH);
 
-    if (reading != lastButtonState)
+    if (reading != lastNORTHState)
     {
-        lastDebounceTime = millis();
+        lastNORTHDebounceTime = millis();
     }
-    if ((millis() - lastDebounceTime) > debounceDelay)
+    if ((millis() - lastNORTHDebounceTime) > debounceDelay)
     {
-        if (reading != buttonState)
+        if (reading != NORTHState)
         {
-            buttonState = reading;
+            NORTHState = reading;
             if (buttonState == HIGH)
             {
-                colorSelected++;
-                if (colorSelected > 9)
-                {
-                    colorSelected = 0;
-                }
+                // DO SOMETHING
             }
         }
     }
-    lastButtonState = reading;
+    lastNORTHState = reading;
 }
 
-
-
-void readButton()
+void readWEST()
 {
-    int reading = digitalRead(colorPin);
+    int reading = digitalRead(WEST);
 
-    if (reading != lastButtonState)
+    if (reading != lastWESTState)
     {
-        lastDebounceTime = millis();
+        lastWESTDebounceTime = millis();
     }
-    if ((millis() - lastDebounceTime) > debounceDelay)
+    if ((millis() - lastWESTDebounceTime) > debounceDelay)
     {
-        if (reading != buttonState)
+        if (reading != WESTState)
         {
-            buttonState = reading;
+            WESTState = reading;
             if (buttonState == HIGH)
             {
-                colorSelected++;
-                if (colorSelected > 9)
-                {
-                    colorSelected = 0;
-                }
+                // DO SOMETHING
             }
         }
     }
-    lastButtonState = reading;
+    lastWESTState = reading;
 }
 
-
-void readButton()
+void readEAST()
 {
-    int reading = digitalRead(colorPin);
+    int reading = digitalRead(EAST);
 
-    if (reading != lastButtonState)
+    if (reading != lastEASTState)
     {
-        lastDebounceTime = millis();
+        lastEASTDebounceTime = millis();
     }
-    if ((millis() - lastDebounceTime) > debounceDelay)
+    if ((millis() - lastEASTDebounceTime) > debounceDelay)
     {
-        if (reading != buttonState)
+        if (reading != EASTState)
         {
-            buttonState = reading;
+            EASTState = reading;
             if (buttonState == HIGH)
             {
-                colorSelected++;
-                if (colorSelected > 9)
-                {
-                    colorSelected = 0;
-                }
+                // DO SOMETHING
             }
         }
     }
-    lastButtonState = reading;
+    lastEASTState = reading;
 }
 
-
-void readButton()
+void readSOUTH()
 {
-    int reading = digitalRead(colorPin);
+    int reading = digitalRead(SOUTH);
 
-    if (reading != lastButtonState)
+    if (reading != lastSOUTHState)
     {
-        lastDebounceTime = millis();
+        lastSOUTHDebounceTime = millis();
     }
-    if ((millis() - lastDebounceTime) > debounceDelay)
+    if ((millis() - lastSOUTHDebounceTime) > debounceDelay)
     {
-        if (reading != buttonState)
+        if (reading != SOUTHState)
         {
-            buttonState = reading;
+            SOUTHState = reading;
             if (buttonState == HIGH)
             {
-                colorSelected++;
-                if (colorSelected > 9)
-                {
-                    colorSelected = 0;
-                }
+                // DO SOMETHING
             }
         }
     }
-    lastButtonState = reading;
+    lastSOUTHState = reading;
 }
