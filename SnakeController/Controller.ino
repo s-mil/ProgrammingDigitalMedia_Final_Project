@@ -31,8 +31,11 @@ unsigned long lastWESTDebounceTime = 0;
 
 void setup()
 {
+    // open the serial connection
     Serial.begin(9600);
     Serial.setTimeout(10);
+
+    // setup the input pins
     pinMode(NORTH, INPUT);
     pinMode(EAST, INPUT);
     pinMode(SOUTH, INPUT);
@@ -41,12 +44,13 @@ void setup()
 
 void loop()
 {
-
+    // Read each button
     readNORTH();
     readSOUTH();
     readEAST();
     readWEST();
 
+    // Send the information down the serial connection
     Serial.print(NORTHState);
     Serial.print(',');
     Serial.print(EASTState);
@@ -55,9 +59,13 @@ void loop()
     Serial.print(',');
     Serial.print(WESTState);
     Serial.println();
+
+    // wait 10 ms
     delay(10);
 }
 
+
+// For each button a function exists to check its value with a debounceDelay.
 void readNORTH()
 {
     int reading = digitalRead(NORTH);
