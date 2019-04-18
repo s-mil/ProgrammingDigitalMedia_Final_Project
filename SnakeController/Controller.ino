@@ -11,26 +11,26 @@ unsigned long debounceDelay = 50;
 
 //NORTH setup
 int lastNORTHState = 0;
-int NORTHState =0;
-unsigned long lastNORTHDebounceTime = 0; 
+int NORTHState = 0;
+unsigned long lastNORTHDebounceTime = 0;
 
 //EAST setup
 int lastEASTState = 0;
-int EASTState =0;
-unsigned long lastEASTDebounceTime = 0; 
+int EASTState = 0;
+unsigned long lastEASTDebounceTime = 0;
 
 //SOUTH setup
 int lastSOUTHState = 0;
-int SOUTHState =0;
-unsigned long lastSOUTHDebounceTime = 0; 
+int SOUTHState = 0;
+unsigned long lastSOUTHDebounceTime = 0;
 
 //WEST setup
 int lastWESTState = 0;
-int WESTState =0;
-unsigned long lastWESTDebounceTime = 0; 
+int WESTState = 0;
+unsigned long lastWESTDebounceTime = 0;
 
-
-void setup(){
+void setup()
+{
     Serial.begin(9600);
     Serial.setTimeout(10);
     pinMode(NORTH, INPUT);
@@ -39,12 +39,23 @@ void setup(){
     pinMode(WEST, INPUT);
 }
 
-void loop(){
+void loop()
+{
 
     readNORTH();
     readSOUTH();
     readEAST();
     readWEST();
+
+    Serial.print(NORTHState);
+    Serial.print(',');
+    Serial.print(EASTState);
+    Serial.print(',');
+    Serial.print(SOUTHState);
+    Serial.print(',');
+    Serial.print(WESTState);
+    Serial.println();
+    delay(10);
 }
 
 void readNORTH()
@@ -60,10 +71,6 @@ void readNORTH()
         if (reading != NORTHState)
         {
             NORTHState = reading;
-            if (buttonState == HIGH)
-            {
-                // DO SOMETHING
-            }
         }
     }
     lastNORTHState = reading;
@@ -82,10 +89,6 @@ void readWEST()
         if (reading != WESTState)
         {
             WESTState = reading;
-            if (buttonState == HIGH)
-            {
-                // DO SOMETHING
-            }
         }
     }
     lastWESTState = reading;
@@ -104,10 +107,6 @@ void readEAST()
         if (reading != EASTState)
         {
             EASTState = reading;
-            if (buttonState == HIGH)
-            {
-                // DO SOMETHING
-            }
         }
     }
     lastEASTState = reading;
@@ -126,10 +125,6 @@ void readSOUTH()
         if (reading != SOUTHState)
         {
             SOUTHState = reading;
-            if (buttonState == HIGH)
-            {
-                // DO SOMETHING
-            }
         }
     }
     lastSOUTHState = reading;
