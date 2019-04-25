@@ -2,10 +2,10 @@
 
 //Assigning pins to buttons
 
-const int NORTH = 5;
-const int EAST = 6;
-const int SOUTH = 7;
-const int WEST = 8;
+const int NORTH = 11;
+const int EAST = 13;
+const int SOUTH = 12;
+const int WEST = 10;
 
 unsigned long debounceDelay = 50;
 
@@ -58,7 +58,7 @@ void loop()
     Serial.print(SOUTHState);
     Serial.print(',');
     Serial.print(WESTState);
-    Serial.println();
+    Serial.println('');
 
     // wait 10 ms
     delay(10);
