@@ -58,7 +58,7 @@ void loop()
     Serial.print(SOUTHState);
     Serial.print(',');
     Serial.print(WESTState);
-    Serial.println('');
+    Serial.println();
 
     // wait 10 ms
     delay(10);

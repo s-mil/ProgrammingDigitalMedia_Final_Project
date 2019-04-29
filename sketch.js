@@ -61,7 +61,23 @@ function portClose() {
     console.log('The serial port closed.');
 }
 
+// sleep time expects milliseconds
+function sleep(time) {
+    return new Promise((resolve) => setTimeout(resolve, time));
+}
+
 //-------------------------------------------------
+function preload() {
+    // sourced from https://freesound.org/people/Timbre/sounds/462631/#
+    player = new Tone.Player({
+        "url": "./Audio/loop.mp3",
+        "loop": "true",
+        "autostart": true,
+        "volume": "-25"
+    }).toMaster();
+    player.loop = true;
+
+}
 
 function setup() {
 
@@ -93,6 +109,22 @@ function setup() {
         xCor.push(xStart + i * diff);
         yCor.push(yStart);
     }
+
+    membrane = new Tone.MembraneSynth({
+        pitchDecay: .01,
+        octaves: 4,
+        oscillator: {
+            type: 'sine'
+        },
+        envelope: {
+            attack: 0.1,
+            decay: 0.4,
+            sustain: 0.01,
+            release: 1.4,
+            attackCurve: 'exponential'
+        },
+        volume: -20
+    }).toMaster();
 }
 
 function draw() {
@@ -113,6 +145,7 @@ function snakeMove() {
         xCor[i] = xCor[i + 1];
         yCor[i] = yCor[i + 1];
     }
+    console.log(direction);
     switch (direction) {
         case 'east':
             xCor[numSegments - 1] = xCor[numSegments - 2] + diff;
@@ -171,6 +204,7 @@ function checkForFruit() {
         yCor.unshift(yCor[0]);
         numSegments++;
         fruitSpawn();
+        membrane.triggerAttackRelease("F4", "8n");
     }
 }
 
