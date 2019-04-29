@@ -6,6 +6,10 @@ const int NORTH = 11;
 const int EAST = 13;
 const int SOUTH = 12;
 const int WEST = 10;
+const int bg = A1;
+
+int mappedAI = 0;
+int rawAI = 0;
 
 unsigned long debounceDelay = 50;
 
@@ -40,6 +44,7 @@ void setup()
     pinMode(EAST, INPUT);
     pinMode(SOUTH, INPUT);
     pinMode(WEST, INPUT);
+    pinMode(bg, INPUT);
 }
 
 void loop()
@@ -50,6 +55,9 @@ void loop()
     readEAST();
     readWEST();
 
+    rawAI = analogRead(bg);
+    mappedAI = (abs(map(rawAI, 0, 1023, 0, 255)));
+
     // Send the information down the serial connection
     Serial.print(NORTHState);
     Serial.print(',');
@@ -58,12 +66,13 @@ void loop()
     Serial.print(SOUTHState);
     Serial.print(',');
     Serial.print(WESTState);
+    Serial.print(',');
+    Serial.print(mappedAI);
     Serial.println('');
 
     // wait 10 ms
     delay(10);
 }
-
 
 // For each button a function exists to check its value with a debounceDelay.
 void readNORTH()
