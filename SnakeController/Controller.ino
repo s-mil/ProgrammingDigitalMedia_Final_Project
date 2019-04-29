@@ -68,7 +68,7 @@ void loop()
     Serial.print(WESTState);
     Serial.print(',');
     Serial.print(mappedAI);
-    Serial.println('');
+    Serial.println();
 
     // wait 10 ms
     delay(10);

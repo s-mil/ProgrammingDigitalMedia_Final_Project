@@ -16,11 +16,14 @@ const xStart = 0; //starting x coordinate for snake
 const yStart = 250; //starting y coordinate for snake
 const diff = 10;
 
+// array of segment coordinates
 let xCor = [];
 let yCor = [];
-
+// for the fruit
 let xFruit = 0;
 let yFruit = 0;
+
+// the score element object
 let scoreElem;
 
 //-----------arduino boilerplate code----------
@@ -58,7 +61,23 @@ function portClose() {
     console.log('The serial port closed.');
 }
 
+// sleep time expects milliseconds
+function sleep(time) {
+    return new Promise((resolve) => setTimeout(resolve, time));
+}
+
 //-------------------------------------------------
+function preload() {
+    // sourced from https://freesound.org/people/Timbre/sounds/462631/#
+    player = new Tone.Player({
+        "url": "./Audio/loop.mp3",
+        "loop": "true",
+        "autostart": true,
+        "volume": "-25"
+    }).toMaster();
+    player.loop = true;
+
+}
 
 function setup() {
 
@@ -73,41 +92,60 @@ function setup() {
     serial.list();                           // list the serial ports
     serial.open(portName, options);          // open a serial port
     //--------Game Setup--------------------
-    scoreElem = createDiv('Score = 0');
+    scoreElem = createDiv('Score = 0'); // html to setup a score display
     scoreElem.position(20, 20);
     scoreElem.id = 'score';
     scoreElem.style('color', 'white');
 
-    createCanvas(500, 500);
-    frameRate(15);
+    // standard p5 prelude
+    createCanvas(500, 500); 
+    frameRate(15);  // framerate at 15 for optimal animation
     stroke(255);
     strokeWeight(10);
-    updateFruitCoordinates();
+    fruitSpawn(); // spawn the first fruit
 
+    // spawn snake
     for (let i = 0; i < numSegments; i++) {
         xCor.push(xStart + i * diff);
         yCor.push(yStart);
     }
+
+    membrane = new Tone.MembraneSynth({
+        pitchDecay: .01,
+        octaves: 4,
+        oscillator: {
+            type: 'sine'
+        },
+        envelope: {
+            attack: 0.1,
+            decay: 0.4,
+            sustain: 0.01,
+            release: 1.4,
+            attackCurve: 'exponential'
+        },
+        volume: -20
+    }).toMaster();
 }
 
 function draw() {
 
-    background(0);
-    updateDirection();
-    for (let i = 0; i < numSegments - 1; i++) {
+    background(0); // black background
+    updateDirection(); // check if the direction is now different
+    for (let i = 0; i < numSegments - 1; i++) { // draw the snake
         line(xCor[i], yCor[i], xCor[i + 1], yCor[i + 1]);
     }
-    console.log(inData);
-    updateSnakeCoordinates();
-    checkGameStatus();
-    checkForFruit();
+    snakeMove(); // update the snakes position
+    gameState(); // check if the game is over
+    checkForFruit(); // check if the snake has eaten a fruit this tick
 }
 
-function updateSnakeCoordinates() {
+// move the snake in the proper direction
+function snakeMove() {
     for (let i = 0; i < numSegments - 1; i++) {
         xCor[i] = xCor[i + 1];
         yCor[i] = yCor[i + 1];
     }
+    console.log(direction);
     switch (direction) {
         case 'east':
             xCor[numSegments - 1] = xCor[numSegments - 2] + diff;
@@ -128,7 +166,8 @@ function updateSnakeCoordinates() {
     }
 }
 
-function checkGameStatus() {
+function gameState() {
+    // If the snake has collided end the game and display a game over
     if (
         xCor[xCor.length - 1] > width ||
         xCor[xCor.length - 1] < 0 ||
@@ -136,12 +175,14 @@ function checkGameStatus() {
         yCor[yCor.length - 1] < 0 ||
         checkSnakeCollision()
     ) {
-        noLoop();
+        noLoop(); 
         const scoreVal = parseInt(scoreElem.html().substring(8));
         scoreElem.html('Game Over \n Score : ' + scoreVal);
     }
 }
 
+
+// Check if the snake has eaten itself 
 function checkSnakeCollision() {
     const snakeHeadX = xCor[xCor.length - 1];
     const snakeHeadY = yCor[yCor.length - 1];
@@ -151,7 +192,9 @@ function checkSnakeCollision() {
         }
     }
 }
-
+/*
+ Check if the snake head collided with the fruit
+*/
 function checkForFruit() {
     point(xFruit, yFruit);
     if (xCor[xCor.length - 1] === xFruit && yCor[yCor.length - 1] === yFruit) {
@@ -160,11 +203,14 @@ function checkForFruit() {
         xCor.unshift(xCor[0]);
         yCor.unshift(yCor[0]);
         numSegments++;
-        updateFruitCoordinates();
+        fruitSpawn();
+        membrane.triggerAttackRelease("F4", "8n");
     }
 }
 
-function updateFruitCoordinates() {
+
+// move the fruit object to a new random location
+function fruitSpawn() {
     xFruit = floor(random(10, (width - 100) / 10)) * 10;
     yFruit = floor(random(10, (height - 100) / 10)) * 10;
 }
