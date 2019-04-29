@@ -1,7 +1,7 @@
 //-----------arduino globals---------------
 var serial;
-var portName = 'COM3';
-var inData = [];
+var portName = 'COM6';
+var inData =  [0,0,0,0,255];
 var rawData;
 var buttonN;
 var buttonE;
@@ -45,11 +45,12 @@ function portOpen() {
 }
 
 function serialEvent() {
-    rawData = String(serial.readLine());
-    rawData = rawData.split(",");
+    rawData = serial.readStringUntil('\n');
+    rawData = rawData.split(","); 
     if (rawData.length > 2) {
         inData = rawData;
-        for (var i = 0; i < inData.length; i++) { inData[i] = parseInt(inData[i], 10); }
+        for (var i = 0; i < inData.length; i++) 
+            { inData[i] = parseInt(inData[i], 10); }
     }
 }
 
@@ -137,6 +138,7 @@ function draw() {
     snakeMove(); // update the snakes position
     gameState(); // check if the game is over
     checkForFruit(); // check if the snake has eaten a fruit this tick
+    //stroke(inData[4]);
 }
 
 // move the snake in the proper direction
